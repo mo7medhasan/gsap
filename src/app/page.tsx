@@ -1,4 +1,4 @@
-import ScrollAnimationPage from "../../components/ScrollAnimationPage";
+import ScrollAnimationPage from "../components/ScrollAnimationPage";
 
 
 
