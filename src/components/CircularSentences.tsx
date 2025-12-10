@@ -16,7 +16,6 @@ export const CircularSentences: React.FC<{ sentences?: string[] }> = memo(
       const items = gsap.utils.toArray<HTMLDivElement>(".circle-item");
 
       const ctx = gsap.context(() => {
-
         /** 1) INITIAL distribution (small circle but spaced) */
         const baseRadius = 120; // ← المسافة الأولية بين الجمل
         items.forEach((item, idx) => {
@@ -33,12 +32,14 @@ export const CircularSentences: React.FC<{ sentences?: string[] }> = memo(
             start: "center center",
             end: "bottom bottom",
             scrub: true,
+            anticipatePin: 1,
+            pinReparent: true,
             pin: true,
           },
         });
 
         const radius = { value: baseRadius };
-        const endRadius = 600;
+        const endRadius = 1200;
 
         tl.fromTo(
           radius,
@@ -54,7 +55,7 @@ export const CircularSentences: React.FC<{ sentences?: string[] }> = memo(
                 const y = Math.sin(angle) * r;
                 gsap.set(item, { x, y });
               });
-            }
+            },
           }
         );
 

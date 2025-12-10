@@ -39,6 +39,7 @@ export const LargeHeroCard = memo(function LargeHeroCard() {
         start: "top top",
         end: "+=1000",
         scrub: 1,
+        anticipatePin:1,
         pin: true,
       },
     });
