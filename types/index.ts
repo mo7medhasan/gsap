@@ -1,0 +1,1 @@
+export type CardData = { id: number; title: string; body: string; image?: string };
