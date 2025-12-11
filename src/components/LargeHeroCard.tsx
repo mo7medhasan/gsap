@@ -38,7 +38,7 @@ export const LargeHeroCard = memo(function LargeHeroCard() {
         trigger: root,
         start: "top top",
         end: "+=1000",
-        scrub: 1,
+          scrub: 1.2,
         anticipatePin:1,
         pin: true,
       },
