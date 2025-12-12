@@ -24,7 +24,8 @@ export const SquareGallery: React.FC<{
       });
       tl.fromTo(
         imgs,
-        { x: move, opacity: 0.5 },
+        { x: move, opacity: 0.5, yPercent: "random(-200, 200)",
+              rotation: "random(-20, 20)", },
         {
           x: 0,
           opacity: 1,

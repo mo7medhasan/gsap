@@ -23,60 +23,75 @@ export const LargeHeroCard = memo(function LargeHeroCard() {
 
     if (!root || !titleEl || !subtitleEl) return;
     const ctx = gsap.context(() => {
+      const titleChars = [...titleEl.querySelectorAll(".char")].reverse();
+      const subtitleChars = [...subtitleEl.querySelectorAll(".char")].reverse();
 
-    const titleChars = [...titleEl.querySelectorAll(".char")].reverse();
-    const subtitleChars = [...subtitleEl.querySelectorAll(".char")].reverse();
+      const tLen = titleChars.length;
+      const sLen = subtitleChars.length;
 
-    const tLen = titleChars.length;
-    const sLen = subtitleChars.length;
+      // إحنا عايزين اللي فوق يتحرك ببطء واللي تحت بسرعة
+      // علشان يخلصوا في نفس التوقيت
+      const totalSteps = Math.max(tLen, sLen);
 
-    // إحنا عايزين اللي فوق يتحرك ببطء واللي تحت بسرعة
-    // علشان يخلصوا في نفس التوقيت
-    const totalSteps = Math.max(tLen, sLen);
-
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: root,
-        start: "top top",
-        end: "+=1000",
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: root,
+          start: "top top",
+          end: "+=1000",
           scrub: 1.2,
-        anticipatePin:1,
-        pin: true,
-      },
-    });
+          anticipatePin: 1,
+          pin: true,
+        },
+      });
 
-    for (let step = 0; step < totalSteps; step++) {
-      // نجيب index مناسب لكل خطوة
-      const tIndex = Math.round((step / (totalSteps - 1)) * (tLen - 1));
-      const sIndex = Math.round((step / (totalSteps - 1)) * (sLen - 1));
+      for (let step = 0; step < totalSteps; step++) {
+        // نجيب index مناسب لكل خطوة
+        const tIndex = Math.round((step / (totalSteps - 1)) * (tLen - 1));
+        const sIndex = Math.round((step / (totalSteps - 1)) * (sLen - 1));
 
-      const tChar = titleChars[tIndex];
-      const sChar = subtitleChars[sIndex];
+        const tChar = titleChars[tIndex];
+        const sChar = subtitleChars[sIndex];
 
-      const pos = step * 0.05; // نفس اللحظة بين الاثنين
+        const pos = step * 0.05; // نفس اللحظة بين الاثنين
 
-      if (tChar) {
-        tl.fromTo(
-          tChar,
-          { x: 0, opacity: 1 },
-          { x: "+=200vw", opacity: 0.4, ease: "none", duration: 0.5 },
-          pos
-        );
+        if (tChar) {
+          tl.fromTo(
+            tChar,
+            {
+              x: 0,
+              opacity: 1,
+            },
+            {
+              x: "+=200vw",
+              opacity: 0.4,
+              ease: "none",
+              duration: 0.5,
+              yPercent: "random(-200, 200)",
+              rotation: "random(-20, 20)",
+            },
+            pos
+          );
+        }
+
+        if (sChar) {
+          tl.fromTo(
+            sChar,
+            { x: 0, opacity: 1 },
+            {
+              x: "+=200vw",
+              opacity: 0.4,
+              ease: "none",
+              duration: 0.25,
+              yPercent: "random(-200, 200)",
+              rotation: "random(-20, 20)",
+            },
+            pos // **نفس لحظة حركة اللي فوق EXACT**
+          );
+        }
       }
-
-      if (sChar) {
-        tl.fromTo(
-          sChar,
-          { x: 0, opacity: 1 },
-          { x: "+=200vw", opacity: 0.4, ease: "none", duration: 0.25 },
-          pos // **نفس لحظة حركة اللي فوق EXACT**
-        );
-      }
-    }
-  }, root);
-       return () => ctx.revert();
-
-    }, []);
+    }, root);
+    return () => ctx.revert();
+  }, []);
 
   return (
     <section

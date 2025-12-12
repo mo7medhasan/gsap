@@ -24,8 +24,8 @@ export const PageFooter: React.FC = memo(function PageFooter() {
   }, []);
 
   return (
-    <footer ref={rootRef} className="w-full bg-gray-900 text-white py-12">
-      <div className="max-w-5xl mx-auto px-6 text-center">
+    <footer ref={rootRef} className="w-full bg-gray-900 h-[50vh] text-white py-12 ">
+      <div className="max-w-5xl mx-auto px-6 text-center text-5xl">
         Footer content — end of page
       </div>
     </footer>

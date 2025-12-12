@@ -49,12 +49,17 @@ export const CircularSentences: React.FC<{ sentences?: string[] }> = memo(
             onUpdate() {
               const r = radius.value;
               items.forEach((item, idx) => {
-                const angle = (idx / items.length) * Math.PI * 2;
+                 const progress = tl.progress();
+              
+                const angle =
+                progress * Math.PI * 2+ (idx / items.length) * Math.PI * 2;
+
                 const x = Math.cos(angle) * r;
                 const y = Math.sin(angle) * r;
                 gsap.set(item, { x, y });
               });
             },
+         
           }
         );
       
@@ -71,7 +76,7 @@ export const CircularSentences: React.FC<{ sentences?: string[] }> = memo(
             });
           },
         });
-        tl.to(items, { opacity: 0, ease: "power3.out" });
+        tl.to(items, { opacity: 0, ease: "power2.out" });
       }, root);
 
       return () => ctx.revert();
