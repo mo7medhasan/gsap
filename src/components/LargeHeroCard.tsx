@@ -22,6 +22,7 @@ export const LargeHeroCard = memo(function LargeHeroCard() {
     const subtitleEl = subtitleRef.current;
 
     if (!root || !titleEl || !subtitleEl) return;
+    const ctx = gsap.context(() => {
 
     const titleChars = [...titleEl.querySelectorAll(".char")].reverse();
     const subtitleChars = [...subtitleEl.querySelectorAll(".char")].reverse();
@@ -72,10 +73,9 @@ export const LargeHeroCard = memo(function LargeHeroCard() {
         );
       }
     }
+  }, root);
+       return () => ctx.revert();
 
-    return () => {
-      tl.kill();
-    };
     }, []);
 
   return (

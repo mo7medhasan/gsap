@@ -12,12 +12,11 @@ export const CircularSentences: React.FC<{ sentences?: string[] }> = memo(
     useEffect(() => {
       const root = rootRef.current;
       if (!root) return;
-
       const items = gsap.utils.toArray<HTMLDivElement>(".circle-item");
 
       const ctx = gsap.context(() => {
-        /** 1) INITIAL distribution (small circle but spaced) */
-        const baseRadius = 120; // ← المسافة الأولية بين الجمل
+        /** INITIAL distribution */
+        const baseRadius = 100;
         items.forEach((item, idx) => {
           const angle = (idx / items.length) * Math.PI * 2;
           const x = Math.cos(angle) * baseRadius;
@@ -25,28 +24,28 @@ export const CircularSentences: React.FC<{ sentences?: string[] }> = memo(
           gsap.set(item, { x, y });
         });
 
-        /** 2) SCROLL animation */
+        /** SCROLL animation */
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: root,
             start: "center center",
-            end: "bottom bottom",
-            scrub: true,
-            anticipatePin: 1,
-            pinReparent: true,
+            end: "+=600", // ← توسّع أبطأ
+            scrub: 1.5, // ← حركة أنعم جداً
             pin: true,
           },
         });
 
         const radius = { value: baseRadius };
-        const endRadius = 1200;
+        const endRadius = Math.max(window.innerWidth, window.innerHeight) * 1.2;
 
+        tl.from(items, { opacity: 0.3 });
         tl.fromTo(
           radius,
           { value: baseRadius },
           {
-            value: endRadius,
-            ease: "power2.out",
+            value: endRadius / 2,
+            ease: "power3.out", // smoother
+            duration:2,
             onUpdate() {
               const r = radius.value;
               items.forEach((item, idx) => {
@@ -58,8 +57,21 @@ export const CircularSentences: React.FC<{ sentences?: string[] }> = memo(
             },
           }
         );
-
-        tl.to(root, { opacity: 0, ease: "power1.in" });
+      
+        tl.to(items, {
+          value: endRadius,
+          ease: "power3.out", // smoother
+          onUpdate() {
+            const r = radius.value;
+            items.forEach((item, idx) => {
+              const angle = (idx / items.length) * Math.PI * 2;
+              const x = Math.cos(angle) * r;
+              const y = Math.sin(angle) * r;
+              gsap.set(item, { x, y });
+            });
+          },
+        });
+        tl.to(items, { opacity: 0, ease: "power3.out" });
       }, root);
 
       return () => ctx.revert();

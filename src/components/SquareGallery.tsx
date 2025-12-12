@@ -10,43 +10,42 @@ export const SquareGallery: React.FC<{
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
-
+    const move = window.innerWidth * 1.2;
     const imgs = root.querySelectorAll(".sq-img");
-
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: root,
           start: "center center",
-          end: "bottom",
-          scrub: 1,
+          end: "+=2000",
+          scrub: 1.2,
           pin: true,
         },
       });
       tl.fromTo(
         imgs,
-        { x: "100vw", opacity: 0.5 },
+        { x: move, opacity: 0.5 },
         {
           x: 0,
           opacity: 1,
           stagger: 0.12,
-          ease: "power2.out",
-         
+          // ease: "power2.out",
         }
       );
-      tl.to(imgs, {
-        opacity:1,
-        x: 0,
-        stagger: 0.06,
-      
-      });
-      // fade out gradually after passing
-      tl.to(imgs, {
-        opacity: 0.5,
-        x: "-100vw",
-        stagger: 0.06,
-      
-      });
+      [...imgs].map((img) =>
+        tl.fromTo(
+          img,
+          {
+            x: 0,
+            opacity: 1,
+          },
+          {
+            opacity: 0.5,
+            x: -move,
+          }
+        )
+      );
+    
     }, root);
 
     return () => ctx.revert();
@@ -57,8 +56,8 @@ export const SquareGallery: React.FC<{
       ref={rootRef}
       className="min-h-screen flex items-center overflow-hidden"
     >
-      <div className="w-full max-w-5xl mx-auto px-6 ">
-        <div className="flex gap-6 ">
+      <div className="w-full max-w-5xl mx-auto  ">
+        <div className="flex gap-6 mx-auto items-center justify-center flex-wrap">
           {items.map((it) => (
             <div
               key={it.id}
