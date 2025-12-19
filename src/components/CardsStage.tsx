@@ -15,15 +15,16 @@ export const CardsStage = memo(function CardsStage() {
     const cards = gsap.utils.toArray<HTMLElement>(".stage-card");
 
     const ctx = gsap.context(() => {
+     
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: root,
           start: "top top",
-          end: "bottom top",
+          end: () => `+=${window.innerHeight}`,
           scrub: 1.2,
-          pinSpacing:false,
-
+          // pinSpacing: false,
           pin: true,
+          anticipatePin: 1,
         },
       });
 
@@ -146,13 +147,13 @@ export const CardsStage = memo(function CardsStage() {
   return (
     <section
       ref={rootRef}
-      className="min-h-[250vh] flex items-center overflow-hidden"
+      className="min-h-[110vh] flex items-center overflow-hidden "
     >
-      <div className=" content w-full max-w-6xl mx-auto px-6 flex gap-8 items-center justify-center">
+      <div className=" content absolute top-1/6  w-full   mx-auto px-6 flex gap-8 items-center justify-center">
         {sampleCards.map((c) => (
           <article
             key={c.id}
-            className="stage-card w-64 h-44 rounded-2xl bg-white/80 border p-4 shadow-md will-change-transform will-change-opacity"
+            className="stage-card translate-x-[200vw]  w-64 h-44 rounded-2xl bg-white/80 border p-4 shadow-md will-change-transform will-change-opacity"
           >
             <div className="flex-1 flex items-center justify-center">IMG</div>
             <h3 className="mt-2 font-semibold">{c.title}</h3>

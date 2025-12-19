@@ -1,12 +1,10 @@
 import React, { memo, useEffect, useRef } from "react";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { sampleSentences } from "../constants/data";
 
-gsap.registerPlugin(ScrollTrigger);
 
-export const CircularSentences: React.FC<{ sentences?: string[] }> = memo(
-  function CircularSentences({ sentences = sampleSentences }) {
+export const CircularSentences: React.FC = memo(
+  function CircularSentences() {
     const rootRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
@@ -28,10 +26,11 @@ export const CircularSentences: React.FC<{ sentences?: string[] }> = memo(
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: root,
-            start: "center center",
-            end: "+=600", // ← توسّع أبطأ
+            start: "top top",
+            end: "bottom top", // ← توسّع أبطأ
             scrub: 1.5, // ← حركة أنعم جداً
             pin: true,
+            pinSpacing: false,
           },
         });
 
@@ -45,26 +44,26 @@ export const CircularSentences: React.FC<{ sentences?: string[] }> = memo(
           {
             value: endRadius / 2,
             ease: "power3.out", // smoother
-            duration:2,
+            duration: 2,
             onUpdate() {
               const r = radius.value;
               items.forEach((item, idx) => {
-                 const progress = tl.progress();
-              
+                const progress = tl.progress();
+
                 const angle =
-                progress * Math.PI * 2+ (idx / items.length) * Math.PI * 2;
+                  progress * Math.PI * 2 + (idx / items.length) * Math.PI * 2;
 
                 const x = Math.cos(angle) * r;
                 const y = Math.sin(angle) * r;
                 gsap.set(item, { x, y });
               });
             },
-         
           }
         );
-      
+
         tl.to(items, {
           value: endRadius,
+          duration: 10,
           ease: "power3.out", // smoother
           onUpdate() {
             const r = radius.value;
@@ -76,23 +75,22 @@ export const CircularSentences: React.FC<{ sentences?: string[] }> = memo(
             });
           },
         });
-        tl.to(items, { opacity: 0, ease: "power2.out" });
+        tl.to(items, { opacity: 0, ease: "power2.out", duration: 0.1 });
       }, root);
 
       return () => ctx.revert();
-    }, [sentences]);
+    }, []);
 
     return (
       <section
         ref={rootRef}
-        className="min-h-[300vh] flex items-center justify-center overflow-hidden"
+        className="min-h-[300vh] relative flex items-center justify-center overflow-hidden"
       >
-        <div className="relative w-60 h-60">
-          {sentences.map((s, idx) => (
+        <div className="absolute w-60 h-60  top-1/6 left-1/2 -translate-x-1/2   ">
+          {sampleSentences.map((s, idx) => (
             <div
               key={idx}
-              className="circle-item absolute left-1/2 top-1/2 w-40 text-center text-sm font-medium"
-              style={{ transform: "translate(-50%, -50%)" }}
+              className="circle-item absolute w-40 text-center text-sm font-medium"
             >
               {s}
             </div>
