@@ -37,10 +37,11 @@ export const LargeHeroCard = memo(function LargeHeroCard() {
         scrollTrigger: {
           trigger: root,
           start: "top top",
-          end: "+=1000",
+          end: "bottom top",
           scrub: 1.2,
           anticipatePin: 1,
           pin: true,
+          pinSpacing:false
         },
       });
 

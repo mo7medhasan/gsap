@@ -18,9 +18,10 @@ export const CardsStage = memo(function CardsStage() {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: root,
-          start: "center center",
-          end: "+=1000",
+          start: "top top",
+          end: "bottom top",
           scrub: 1.2,
+          pinSpacing:false,
 
           pin: true,
         },
@@ -128,7 +129,7 @@ export const CardsStage = memo(function CardsStage() {
               }
         );
       });
-      cards.forEach((card, idx) => {
+      cards.forEach((card) => {
         tl.to(card, {
           x: -moveX,
           ease: "power3.out", // smoother
